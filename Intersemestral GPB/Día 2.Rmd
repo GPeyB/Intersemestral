@@ -1,0 +1,174 @@
+---
+title: "Dia2"
+author: "Gabriel Peytral Borja"
+date: "18/1/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+rm(list = ls())
+##Intersemestral día 2
+```
+
+**Repaso día 1**
+```{r}
+coches<-read.csv("mtcars.csv")
+
+rownames(coches)<- coches$X
+coches <- coches [,-1]
+names(coches)[c(1,4,6,9)]<- c("Millas por galón","Caballos de fuerza", "Peso", "Transmisión")
+hist(coches$`Millas por galón`)
+coches$Transmisión<-as.factor(coches$Transmisión)
+plot(x=coches$Peso, y=coches$`Caballos de fuerza`, col=coches$Transmisión)
+
+```
+**Gráfica de caja y bigote**
+```{r}
+# Gráfica de variable numérica en función de variable nominal (factor)
+boxplot(coches$`Millas por galón`~coches$Transmisión, horizontal = TRUE, notch=T, col = ("green"))
+```
+
+**Pueba T**
+Relación señal ruido. Si las medias coinciden aumentan la señal, si por otro lado aumenta la varianza se dispersan y aumenta el ruido.
+Prueba T grande = Relación superior de señal
+
+```{r}
+t.test(coches$`Millas por galón`~coches$Transmisión) # Sintaxis 1
+#value bajo = (menos de 5%) descartamos que coincidan las medias y concluimos 
+#que son diferentes
+
+```
+
+```{r}
+#Ejercicio 2
+boxplot(coches$`Caballos de fuerza`~coches$vs, horizontal = TRUE, col = ("green"))
+t.test(coches$`Caballos de fuerza`~coches$vs)
+```
+
+**Ejercicio 3**
+```{r}
+cars<- read.csv2("cars.csv")
+# Revisando distribuciones de las variables 
+# Velocidad
+dotchart(cars$speed)
+hist(cars$speed)
+
+# Distancia de frenado 
+dotchart(cars$dist)
+hist(cars$dist)
+
+# Estimar curva de densidad (suavizar el histograma)
+plot(cars$speed)
+plot(cars$dist)
+
+
+```
+Descargar e instalar librerías
+```{r}
+#nstall.packages("MASS")
+library(MASS)
+fitdistr(cars$speed, "")
+fitdistr(cars$dist, "normal")
+# Ver como se ajustan distribuciones
+
+
+```
+```{r}
+#nstall.packages("visualize")
+library(visualize)
+mediaspeed<- mean(cars$speed)
+sdspeed <- sd(cars$speed)
+visualize.norm(mu= mediaspeed, sd = sdspeed, stat = 25, section = "upper")
+
+media_dist<- mean(cars$dist)
+sd_dist <- sd(cars$dist)
+visualize.norm(mu= media_dist, sd = sd_dist)
+
+
+```
+
+**estandarizar datos**
+```{r}
+
+cars$dist.est <-cars$dist-(mean(cars$dist))/ sd(cars$dist)
+hist(cars$dist.est)
+plot(cars$dist.est)
+```
+**Ejercicio 8**
+```{r}
+lluvia<- read.csv("lluvia.csv")
+hist(lluvia$mm.lluvia)
+fitdistr(lluvia$mm.lluvia, "exponential")
+visualize.exp(theta = 0.900, stat = 2 )
+```
+**Covarianza t correlaciones**
+
+```{r}
+#Correlación no implica causalidad 
+cov(cars$dist, cars$speed)
+cor(cars$dist, cars$speed)
+
+cor(coches[,c(1,4,6)])
+plot(x=coches$Peso, y = coches$`Millas por galón`)
+# Correlación negativa = relación inversa 
+```
+
+```{r}
+ad<- read.csv("advertising.csv")
+str(ad)
+# Ventas en miles de dolares y el gasto en medios de comunicación 
+cor(ad[,c(1:4)])
+# La variable que más se relaciona con las ventas es la TV
+plot(x=ad$TV, y=ad$Sales)
+```
+**Regresión lineal**
+Estudio de relación enrte dos variables asociadas de manera no determinista 
+variable explicativa = TV
+Variable de respuesta = Ventas
+
+Y = b0 +b1x1 +e
+```{r}
+lm1<-lm(ad$Sales~ad$TV)
+lm1
+summary(lm1)
+```
+y = 6.97 +0.055(tv)+ error
+```{r}
+plot(x=ad$TV, y=ad$Sales, col="red", pch=25)
+abline(a=6.97, b=0.055, lty=3)
+text(x=5, y=25, "r^2=0.81", cex= 0.8)
+
+( 0.90120791)^2
+
+```
+**Ejercicio 12**
+```{r}
+iris<- read.csv("iris.csv")
+iris$Species<-as.factor(iris$Species)
+plot(iris$Petal.Length~iris$Petal.Width, col=iris$Species)
+iris$Species<-as.factor(iris$Species)
+
+
+setosa <- iris[1:50,]
+versicolor <-iris[51:100,]
+virginica <- iris[101:150,]
+
+lm(setosa$Petal.Length~setosa$Petal.Width)
+lm(versicolor$Petal.Length~versicolor$Petal.Width)
+lm(virginica$Petal.Length~virginica$Petal.Width)
+
+##################################################
+plot(iris$Petal.Length~iris$Petal.Width, col=iris$Species)
+abline(a=1.32, b=0.54, lty = 23)
+abline(a=1.78, b=1.86, lty = 24, col="red")
+abline(a=4.24, b=0.64, lty = 25, col = "green")
+
+```
+
+
+
