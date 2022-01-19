@@ -1,0 +1,126 @@
+---
+title: "Dia1"
+author: "Gabriel Peytral Borja"
+date: "1/17/2022"
+output: html_document
+---
+```{r}
+##limpiar memoria 
+rm(list = ls()) 
+## Curso intersemestral ENESJ
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Ejercicios de funciones**
+
+```{r}
+farenheitacelsius<- function(temp_F){
+  
+temp_c<-(temp_F-32)*5/9
+
+return (temp_c)}
+
+farenheitacelsius(45)
+```
+
+```{r}
+Multi_sqrt_2num <- function (a,b){
+  resultado <-sqrt(a)*sqrt(b)
+  return(resultado)}
+
+Multi_sqrt_2num(25,36)
+
+```
+```{r}
+x = sample(-5:5, 10)
+error_estandar <- function(x){
+  error<- sd(x)/sqrt(length(x))
+return(error)}
+
+error_estandar(x)
+```
+
+
+```{r}
+y = sample(-5:5, 10)
+log_vector_mas1 <- function (y){
+mas_uno_log <- log(y+1)
+return (mas_uno_log)
+}
+
+log_vector_mas1(y)
+```
+
+**Importación de datos**
+```{r}
+iris<-read.csv("iris.csv")
+str (iris)
+iris<- iris [,-1]
+iris$Fecha<-"2022/01/17"
+```
+
+```{r}
+iris <- as.character.factor(iris$Species)
+levels(iris$Species)
+#Subconjunto con operadores relacionales 
+setosa <-  iris[iris$Species=="setosa",]
+versicolor <-  iris[iris$Species=="versicolor",]
+virginica <-  iris[iris$Species=="virginica",]
+
+
+ancho_sepal <-  iris[iris$Sepal.Width >=3,]
+no_setosa <-  iris[iris$Species!="setosa",]
+
+ancho_sepal_y_lon <-  iris[(iris$Sepal.Width >=3 & iris$Sepal.Length >=2),]
+```
+
+```{r}
+names(iris)
+# Cambiando nombres de columnas
+names(iris)<- c("Largo.sepalo","Ancho.sepalo","Largo.petalo", "Ancho.petalo", "Especie")
+names(iris)[4]<- ("A.petalo")
+
+table(iris$Especie)
+```
+
+**Ploteo básico**
+```{r}
+# Histograma
+hist(iris$Largo.sepalo)
+plot(iris)
+iris$Especie <- as.factor(iris$Especie)
+dotchart(iris$Largo.sepalo, groups=iris$Especie)
+str(iris)
+```
+```{r}
+plot(x=iris$Largo.sepalo, y= iris$Ancho.sepalo,col=iris$Especie, main="Mi gráfica", xlab="longitud del sepalo (cm)", ylab = "Ancho del sepalo (cm)",xlim = c(0,10))
+```
+```{r}
+#Largo en función de la especie (número en función de factor)
+boxplot(iris$Largo.sepalo~iris$Especie,col=c("red","blue", "green"), main="Mi gráfica 2", xlab="Especie", ylab = "Largo del sepalo (cm)")
+```
+**Ejercicio 1**
+
+```{r}
+iris$Species <- as.factor(iris$Species)
+sin_anchomenor25 <- iris[iris$Sepal.Width >2.5,]
+plot(x=iris$Petal.Length, y=iris$Sepal.Length, xlab="Largo del pétalo", ylab = "Largo del sepalo (cm)",col=iris$Species)
+
+```
+
+**Ejercicio 2**
+```{r}
+Wage<-read.csv("Wage.csv")
+Wage <- Wage[,-1]
+Wage <- Wage[Wage$wage<280,]
+Wage$education <-as.factor(Wage$education)
+plot(x=Wage$age,y=Wage$wage,col= Wage$education, xlab="Salario", ylab = "Edad")
+  
+```
+
+
+
